@@ -130,11 +130,6 @@ module.exports = {
     next();
   },
 
-  afterCreate: function (values, next) {
-    NotificationService.sendWelcomeEmail(values);
-    next();
-  },
-
   softDelete: function (criteria) {
     return this.update(criteria, {
       isDeleted: true,

@@ -23,6 +23,7 @@ module.exports = {
   create(req, res) {
     let data = req.body;
     User.create(data).then((user) => {
+      if (user.role === 'admin') NotificationService.sendWelcomeEmail(data);
       return ResponseService.json(
         200, res, 'User created successfully', user
       );

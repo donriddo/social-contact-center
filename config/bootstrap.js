@@ -28,7 +28,7 @@ module.exports.bootstrap = function (cb) {
       lastName: 'User',
       email: 'donriddo@gmail.com',
       password: 'riddo2020',
-      roles: 'saas',
+      role: 'saas',
       address: '229 Herbert Macaulay, Yaba.',
       phone: '2348113070914',
     };
