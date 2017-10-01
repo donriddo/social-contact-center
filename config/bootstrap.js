@@ -13,7 +13,6 @@ module.exports.bootstrap = function (cb) {
 
   global._ = require('lodash');
   global._pager = require('sails-pager');
-  global._Sugar = require('sugar');
   global._bcrypt = require('bcryptjs');
   global._promise = require('bluebird');
   global._uuid = require('node-uuid');

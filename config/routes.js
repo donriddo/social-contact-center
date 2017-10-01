@@ -68,5 +68,5 @@ module.exports.routes = {
   'DELETE /user/:id': {
     controller: 'UserController',
     action: 'delete',
-  }
+  },
 };
