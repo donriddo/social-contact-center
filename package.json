@@ -30,7 +30,9 @@
     "sails": "~0.12.10",
     "sails-disk": "~0.10.9",
     "sails-mongo": "^0.12.2",
-    "sails-validation-messages": "^0.0.0"
+    "sails-pager": "^2.1.0",
+    "sails-validation-messages": "^0.0.0",
+    "sparkpost": "^2.1.2"
   },
   "scripts": {
     "debug": "node debug app.js",

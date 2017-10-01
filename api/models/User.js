@@ -131,7 +131,7 @@ module.exports = {
   },
 
   afterCreate: function (values, next) {
-    NotificationService.sendVerification(values);
+    NotificationService.sendWelcomeEmail(values);
     next();
   },
 
