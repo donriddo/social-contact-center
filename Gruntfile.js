@@ -12,7 +12,7 @@
  * Check out the `tasks` directory instead.
  */
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
 
   // Load the include-all library in order to require all of our grunt
@@ -46,7 +46,7 @@ module.exports = function(grunt) {
     return includeAll({
       dirname: require('path').resolve(__dirname, relPath),
       filter: /(.+)\.js$/,
-      excludeDirs: /^\.(git|svn)$/
+      excludeDirs: /^\.(git|svn)$/,
     }) || {};
   }
 
@@ -70,7 +70,7 @@ module.exports = function(grunt) {
 
   // (ensure that a default task exists)
   if (!registerDefinitions.default) {
-    registerDefinitions.default = function(grunt) {
+    registerDefinitions.default = function (grunt) {
       grunt.registerTask('default', []);
     };
   }

@@ -19,7 +19,7 @@
  *   https://github.com/gruntjs/grunt-contrib-copy
  *
  */
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   grunt.config.set('copy', {
     dev: {
@@ -27,17 +27,17 @@ module.exports = function(grunt) {
         expand: true,
         cwd: './assets',
         src: ['**/*.!(coffee|less)'],
-        dest: '.tmp/public'
-      }]
+        dest: '.tmp/public',
+      },],
     },
     build: {
       files: [{
         expand: true,
         cwd: '.tmp/public',
         src: ['**/*'],
-        dest: 'www'
-      }]
-    }
+        dest: 'www',
+      },],
+    },
   });
 
   grunt.loadNpmTasks('grunt-contrib-copy');

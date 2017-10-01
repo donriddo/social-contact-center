@@ -1,6 +1,20 @@
 {
   "globals": {
-    "_": true
+    "_": true,
+    "_bcrypt": true,
+    "_jwt": true,
+    "_uuid": true,
+    "_pager": true,
+    "_validator": true,
+    "EmailService": true,
+    "NotificationService": true,
+    "ResponseService": true,
+    "ValidationService": true,
+    "JwtService": true,
+    "QueryService": true,
+    "User": true,
+    "Setup": true,
+    "sails": true
   },
   "env": {
     "es6": true,

@@ -4,9 +4,19 @@
   "safeContextKeyword": null,
   "disallowMultipleLineBreaks": null,
   "requireShorthandArrowFunctions": false
-  // ,
-  // "requireSpacesInAnonymousFunctionExpression": {
-  //   "beforeOpeningCurlyBrace": true,
-  //   "beforeOpeningRoundBrace": true
-  // }
+  ,
+  "requireSpacesInAnonymousFunctionExpression": {
+    "beforeOpeningCurlyBrace": true,
+    "beforeOpeningRoundBrace": true
+  },
+  "maximumLineLength": {
+    "value": 120,
+    "allExcept": [
+      "comments",
+      "functionSignature",
+      "require",
+      "regex",
+      "urlComments"
+    ]
+  }
 }

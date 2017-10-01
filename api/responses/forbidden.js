@@ -12,7 +12,7 @@
  * ```
  */
 
-module.exports = function forbidden (data, options) {
+module.exports = function forbidden(data, options) {
 
   // Get access to `req`, `res`, & `sails`
   var req = this.req;
@@ -24,9 +24,8 @@ module.exports = function forbidden (data, options) {
 
   // Log error to console
   if (data !== undefined) {
-    sails.log.verbose('Sending 403 ("Forbidden") response: \n',data);
-  }
-  else sails.log.verbose('Sending 403 ("Forbidden") response');
+    sails.log.verbose('Sending 403 ("Forbidden") response: \n', data);
+  } else sails.log.verbose('Sending 403 ("Forbidden") response');
 
   // Only include errors in response if application environment
   // is not set to 'production'.  In production, we shouldn't
@@ -49,9 +48,9 @@ module.exports = function forbidden (data, options) {
   var viewData = data;
   if (!(viewData instanceof Error) && 'object' == typeof viewData) {
     try {
-      viewData = require('util').inspect(data, {depth: null});
+      viewData = require('util').inspect(data, { depth: null });
     }
-    catch(e) {
+    catch (e) {
       viewData = undefined;
     }
   }
@@ -73,12 +72,13 @@ module.exports = function forbidden (data, options) {
       // Additionally:
       // • If the view was missing, ignore the error but provide a verbose log.
       if (err.code === 'E_VIEW_FAILED') {
-        sails.log.verbose('res.forbidden() :: Could not locate view for error page (sending JSON instead).  Details: ',err);
+        sails.log.verbose('res.forbidden() :: Could not locate view for error page (sending JSON instead).  Details: ', err);
       }
       // Otherwise, if this was a more serious error, log to the console with the details.
       else {
         sails.log.warn('res.forbidden() :: When attempting to render error page view, an error occured (sending JSON instead).  Details: ', err);
       }
+
       return res.jsonx(data);
     }
 
