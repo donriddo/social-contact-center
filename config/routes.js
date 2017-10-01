@@ -46,4 +46,27 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+  /*
+  ** User Routes
+  */
+  'POST /user': {
+    controller: 'UserController',
+    action: 'create',
+  },
+  'GET /user/:id': {
+    controller: 'UserController',
+    action: 'view',
+  },
+  'GET /user': {
+    controller: 'UserController',
+    action: 'list',
+  },
+  'PUT /user/:id': {
+    controller: 'UserController',
+    action: 'update',
+  },
+  'DELETE /user/:id': {
+    controller: 'UserController',
+    action: 'delete',
+  }
 };
