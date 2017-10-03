@@ -1,65 +1,171 @@
 /**
- * Authentication Controller
- */
+* Authentication Controller
+*/
+
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
+const moment = require('moment');
 module.exports = {
 
+  /**
+  * @api {post} /login Login
+  * @apiName Log into the system
+  * @apiGroup Auth
+  * @apiVersion 0.0.1
+  *
+  * @apiParam {String} email User's email address
+  * @apiParam {String} password user's password
+  *
+  *
+  * @apiSuccessExample Success-Response
+  * HTTP/1.1 200 OK
+  * {
+  *    response: {
+  *        message: "Login Successful",
+  *        data: {
+  *          user: {
+  *              "id": "slkdakd93j92d9n29necu9",
+  *              "email": "email@example.com"
+  *          },
+  *          token: "JKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJsYXN0bmFtZSI6IaWDA4MTRmZDMi
+  *          			LCJpYXQiOjE0MTg3c1MjA4MH0.Dj4niX-IgjHkaAu2fcWiZc29oq2h6M
+  *          			uvsaXS3DD_glA"
+  *          expiry: "1418913428"
+  *        }
+  *    }
+  * }
+  *
+  * @apiErrorExample Error-Response
+  * HTTP/1.1 404 Invalid Login
+  * {
+  *    response: {
+  *        message: "Invalid login parameters"
+  *    }
+  * }
+  *
+  * @apiError (Error 400) {Object} response Variable holding response data
+  * @apiError (Error 400) {String} response.message response message
+  */
   login: function (req, res) {
-    passport.authenticate('local', { session: false }, function (err, user, info) {
+    if (req.method == 'POST') {
+      passport.authenticate('local', function (err, user, info) {
+        if ((!user)) {
+          return ResponseService.json(400, res, 'Invalid login parameters');
+        }
 
-      /* istanbul ignore if */
+        if (err) {
+          return ResponseService.json(400, res, 'Error');
+        } else {
+
+          delete user.password;
+          let expiry = jwt.expiry;
+          let jwtSecret = jwt.secret;
+          let token = jwt.sign(
+            user, jwtSecret,
+            { expiresIn: expiry }
+          );
+
+          let decodedToken = jwt.verify(token, jwtSecret, function (err, decoded) {
+            req.user = user;
+            return ResponseService.json(
+              200, res, 'Login successful', { user: user, token: token, expiry: decoded.exp }
+            );
+          });
+        }
+      })(req, res);
+    } else {
+      return ResponseService.json(400, res, 'Not a proper http verb');
+    }
+  },
+
+
+  /**
+  * @api {post} /refresh_token Refresh token
+  * @apiName Referesh A Token
+  * @apiGroup Auth
+  * @apiVersion 0.0.1
+  *
+  * @apiParam {String} token An active jwt token
+  *
+  *
+  * @apiSuccessExample Success-Response
+  * HTTP/1.1 200 OK
+  * {
+  *    response: {
+  *        message: "Toke refreshed successfully",
+  *        data: {
+  *          user: {
+  *              "id": "slkdakd93j92d9n29necu9",
+  *              "email": "email@example.com"
+  *          },
+  *          token: "JKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJsYXN0bmFtZSI6IaWDA4MTRmZDMi
+  *          			LCJpYXQiOjE0MTg3c1MjA4MH0.Dj4niX-IgjHkaAu2fcWiZc29oq2h6M
+  *          			uvsaXS3DD_glA"
+  *          expiry: "1418913428"
+  *        }
+  *    }
+  * }
+  *
+  * @apiErrorExample Error-Response
+  * HTTP/1.1 404 Invalid Login
+  * {
+  *    response: {
+  *        message: "Invalid token"
+  *    }
+  * }
+  *
+  * @apiErrorExample Error-Response
+  * HTTP/1.1 404 Invalid Login
+  * {
+  *    response: {
+  *        message: "Login is required"
+  *    }
+  * }
+  *
+  * @apiError (Error 400) {Object} response letiable holding response data
+  * @apiError (Error 400) {String} response.message response message
+  *
+  * @apiUse NotFoundExample
+  */
+  refreshToken: function (req, res) {
+
+    let jwtSecret = sails.config.settings.jwt.secret;
+    // verify the existing token
+    jwt.verify(req.body.token, jwtSecret, function (err, profile) {
 
       if (err) {
-        req.session.flash = { err: err };
-        return res.redirect('/api/showLogin');
-      }
-      if (info) {
-        req.session.flash = { err: info };
-        return res.redirect('/api/showLogin');
-      }
-      if (!user) {
-        req.session.flash = { err: info };
-        return res.redirect('/api/showLogin');
+        return res.json(401, { response: { message: 'Invalid token' } });
       }
 
-      var token = JwtService.issue({ id: user.id });
-      if (_.has(req.headers, 'x-mobile')) {
-        token = JwtService.issue({ id: user.id }, sails.config.settings.jwt.expiry);
+      //if more than 14 days old, force login
+      if (!moment.unix(profile.iat).isBefore(moment.unix(profile.iat).add('14', 'days'))) {
+        return ResponseService.json(401, res, 'Login is required');
       }
-      req.session.authorization = 'Bearer '.concat(token);
 
-      if (_.includes(user.roles, 'customer')) {
-        Customer.findOne({ id: user.customer.id }).populate('applications')
-          .then(customer => {
-            if (customer.applications.length) return res.redirect('/home');
-            return res.view('customer/dashboard-calculate', {
-              _user: user,
-              application: {
-                status: false,
-                assetsUploaded: false,
-                incomeUploaded: false,
-                id: 0
-              }
-            });
-          })
-          .catch(err => {
-            req.session.flash = { err: err };
-            return res.redirect('/api/logout');
-          });
-      }
-      if (_.includes(user.roles, 'consultant')) {
-        return res.redirect('/dashboard/admin/home');
-      }
-    })(req, res);
-  },
+      // check if the user still exists
+      User.findOne({ id: profile.id, isDeleted: false }).exec(function findCB(err, user) {
 
-  logout(req, res) {
-    delete req.session.authorization;
-    res.redirect('/api/showLogin');
-  },
+        if (err) {
+          return ValidationService.jsonResolveError(err, User, res);
+        }
 
-  pusherAuth: function (req, res) {
-    PusherService.auth(req.body, req.user, function (err, auth) {
-      return res.status(200).json(auth);
+        if (!user) {
+          return ResponseService.json(404, res, 'User not found');
+        }
+
+        let refreshedToken = jwt.sign(
+          user, jwtSecret, {
+            expiresInMinutes: tokenExpiryInMinutes,
+          }
+        );
+        let decodedToken = jwt.verify(refreshedToken, jwtSecret, function (err, decoded) {
+          return ResponseService.json(
+            200, res, 'Token refreshed successful',
+            { user: user, token: refreshedToken, expiry: decoded.exp }
+          );
+        });
+      });
+
     });
-  }
+  },
 };

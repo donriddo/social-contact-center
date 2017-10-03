@@ -23,6 +23,7 @@
     "include-all": "^1.0.0",
     "jsonwebtoken": "^8.0.1",
     "lodash": "^4.17.4",
+    "moment": "^2.18.1",
     "node-uuid": "^1.4.8",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
