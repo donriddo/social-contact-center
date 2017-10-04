@@ -69,4 +69,16 @@ module.exports.routes = {
     controller: 'UserController',
     action: 'delete',
   },
+
+  /**
+   * Facebook WebHooks
+   */
+  'GET /facebook': {
+    controller: 'FacebookController',
+    action: 'verifyToken',
+  },
+  'POST /facebook': {
+    controller: 'FacebookController',
+    action: 'receiveMessage',
+  },
 };

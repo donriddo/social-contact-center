@@ -28,6 +28,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "rc": "1.0.1",
+    "request": "^2.83.0",
     "sails": "~0.12.10",
     "sails-disk": "~0.10.9",
     "sails-mongo": "^0.12.2",
