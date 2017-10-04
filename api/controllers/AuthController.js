@@ -58,14 +58,13 @@ module.exports = {
         } else {
 
           delete user.password;
-          let expiry = jwt.expiry;
-          let jwtSecret = jwt.secret;
+          const { expiry, secret } = sails.config.settings.jwt;
           let token = jwt.sign(
-            user, jwtSecret,
+            user, secret,
             { expiresIn: expiry }
           );
 
-          let decodedToken = jwt.verify(token, jwtSecret, function (err, decoded) {
+          let decodedToken = jwt.verify(token, secret, function (err, decoded) {
             req.user = user;
             return ResponseService.json(
               200, res, 'Login successful', { user: user, token: token, expiry: decoded.exp }
@@ -129,9 +128,9 @@ module.exports = {
   */
   refreshToken: function (req, res) {
 
-    let jwtSecret = sails.config.settings.jwt.secret;
+    let secret = sails.config.settings.jwt.secret;
     // verify the existing token
-    jwt.verify(req.body.token, jwtSecret, function (err, profile) {
+    jwt.verify(req.body.token, secret, function (err, profile) {
 
       if (err) {
         return res.json(401, { response: { message: 'Invalid token' } });
@@ -154,11 +153,11 @@ module.exports = {
         }
 
         let refreshedToken = jwt.sign(
-          user, jwtSecret, {
+          user, secret, {
             expiresInMinutes: tokenExpiryInMinutes,
           }
         );
-        let decodedToken = jwt.verify(refreshedToken, jwtSecret, function (err, decoded) {
+        let decodedToken = jwt.verify(refreshedToken, secret, function (err, decoded) {
           return ResponseService.json(
             200, res, 'Token refreshed successful',
             { user: user, token: refreshedToken, expiry: decoded.exp }
