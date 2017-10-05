@@ -8,6 +8,7 @@
  * For more information on bootstrapping your app, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.bootstrap.html
  */
+const request = require('request');
 
 module.exports.bootstrap = function (cb) {
 
@@ -32,6 +33,26 @@ module.exports.bootstrap = function (cb) {
       address: '229 Herbert Macaulay, Yaba.',
       phone: '2348113070914',
     };
+
+    request({
+      uri: 'https://graph.facebook.com/v2.6/me/messenger_profile',
+      qs: { access_token: sails.config.settings.facebook.PAGE_ACCESS_TOKEN },
+      method: 'POST',
+      json: {
+        get_started: {
+          payload: '<GET_STARTED_PAYLOAD>',
+        },
+      },
+
+    }, function (error, response, body) {
+      if (!error && response.statusCode == 200 && body.result) {
+        console.log('Successfully set GET_STARTED payload: ', body);
+      } else {
+        console.error('Unable to set payload.');
+        console.error(response);
+        console.error(error);
+      }
+    });
 
     User.create(adminUser).then(user => {
       return [

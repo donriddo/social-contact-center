@@ -3,18 +3,6 @@ const request = require('request');
 //////////////////////////
 // Sending helpers
 ////////////////////////
-function sendTextMessage(recipientId, messageText) {
-  let messageData = {
-    recipient: {
-      id: recipientId,
-    },
-    message: {
-      text: messageText,
-    }
-  };
-
-  callSendAPI(messageData);
-}
 
 function sendGenericMessage(recipientId) {
   let messageData = {
@@ -41,7 +29,7 @@ function sendGenericMessage(recipientId) {
                 {
                   type: 'postback',
                   title: 'Call Postback',
-                  payload: 'Payload for first bubble',
+                  payload: '<GET_STARTED_PAYLOAD>',
                 },
               ],
             },
@@ -88,13 +76,26 @@ function callSendAPI(messageData) {
         messageId, recipientId);
     } else {
       console.error('Unable to send message.');
-      console.error(response);
-      console.error(error);
+      console.error('response: ', response.statusCode);
+      console.error('error: ', error);
     }
   });
 }
 
 module.exports = {
+  sendTextMessage(recipientId, messageText) {
+    let messageData = {
+      recipient: {
+        id: recipientId,
+      },
+      message: {
+        text: messageText,
+      },
+    };
+
+    callSendAPI(messageData);
+  },
+
   // Incoming events handling
   receivedMessage(event) {
     let senderID = event.sender.id;
@@ -120,14 +121,15 @@ module.exports = {
           break;
 
         default:
-          sendTextMessage(senderID, messageText);
+          this.sendTextMessage(senderID, messageText);
       }
     } else if (messageAttachments) {
-      sendTextMessage(senderID, 'Message with attachment received');
+      this.sendTextMessage(senderID, 'Message with attachment received');
     }
   },
 
   receivedPostback(event) {
+    const self = this;
     let senderID = event.sender.id;
     let recipientID = event.recipient.id;
     let timeOfPostback = event.timestamp;
@@ -141,7 +143,37 @@ module.exports = {
 
     // When a postback is called, we'll send a message back to the sender to
     // let them know it was successful
-    sendTextMessage(senderID, 'Postback called');
+    if (payload === '<GET_STARTED_PAYLOAD>') {
+      request({
+        uri: `https://graph.facebook.com/v2.6/${senderID}`,
+        qs: {
+          fields: sails.config.settings.facebook.fields,
+          access_token: sails.config.settings.facebook.PAGE_ACCESS_TOKEN,
+        },
+        method: 'GET',
+
+      }, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+          let data = JSON.parse(body);
+          delete data.id;
+          console.log('Successfully retrieved facebookProfile profile: ', data);
+          let facebookProfileData = Object.assign(data, { psid: senderID });
+          FacebookProfile.create(facebookProfileData).then(function (facebookProfile) {
+            console.log('FacebookProfile created successfully: ', facebookProfile);
+            self.sendTextMessage(senderID, `Welcome ${facebookProfile.first_name}`);
+          }).catch(err => {
+            console.error(err);
+          });
+        } else {
+          console.error('Unable to set payload.');
+          // console.error(response);
+          // console.error(error);
+        }
+      });
+    } else {
+      this.sendTextMessage(senderID, 'Postback called');
+    }
+
   },
 
 };

@@ -14,6 +14,8 @@
     "QueryService": true,
     "User": true,
     "Setup": true,
+    "FacebookProfile": true,
+    "FacebookService": true,
     "sails": true
   },
   "env": {

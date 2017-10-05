@@ -71,7 +71,7 @@ module.exports.routes = {
   },
 
   /**
-   * Facebook WebHooks
+   * Facebook Routes & WebHooks
    */
   'GET /facebook': {
     controller: 'FacebookController',
@@ -80,5 +80,13 @@ module.exports.routes = {
   'POST /facebook': {
     controller: 'FacebookController',
     action: 'receiveMessage',
+  },
+  'POST /facebook/message': {
+    controller: 'FacebookController',
+    action: 'message',
+  },
+  'POST /facebook/broadcast': {
+    controller: 'FacebookController',
+    action: 'broadcast',
   },
 };
