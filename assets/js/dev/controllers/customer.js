@@ -11,7 +11,10 @@ angular.module('app')
           type: 'success',
           title: response.data.message,
         });
-        $state.go('home.customer');
+        setTimeout(function () {
+          $state.reload();
+        }, 2000);
+
       }, error => {
         console.log('Got error: ', error);
         toaster.pop({
