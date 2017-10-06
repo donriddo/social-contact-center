@@ -1,0 +1,28 @@
+<nav class="nav-extended">
+  <div class="nav-wrapper orange">
+    <a href="#" class="brand-logo">Facebook - Twitter Messenger API</a>
+    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <li><a ui-sref="home.admin">Admin View</a></li>
+      <li><a ui-sref="home.customer">Customer View</a></li>
+    </ul>
+    <ul class="side-nav" id="mobile-demo">
+      <li><a ui-sref="home.admin">Admin View</a></li>
+      <li><a ui-sref="home.customer">Customer View</a></li>
+    </ul>
+  </div>
+</nav>
+<toaster-container></toaster-container>
+<div ui-view>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $(".button-collapse").sideNav({closeOnClick: true});
+    // $('.parallax').parallax();
+    // $(".dropdown-button").dropdown({
+    //   hover: false
+    // });
+  }
+  );
+</script>

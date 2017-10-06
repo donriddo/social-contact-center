@@ -46,6 +46,14 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+  /**
+   * Auth Routes
+   */
+  'POST /login': {
+    controller: 'AuthController',
+    action: 'login',
+  },
+
   /*
   ** User Routes
   */
@@ -70,6 +78,30 @@ module.exports.routes = {
     action: 'delete',
   },
 
+  /*
+  ** Facebook Profile Routes
+  */
+  'POST /facebookProfile': {
+    controller: 'FacebookController',
+    action: 'create',
+  },
+  'GET /facebookProfile/:id': {
+    controller: 'FacebookController',
+    action: 'view',
+  },
+  'GET /facebookProfile': {
+    controller: 'FacebookController',
+    action: 'list',
+  },
+  'PUT /facebookProfile/:id': {
+    controller: 'FacebookController',
+    action: 'update',
+  },
+  'DELETE /facebookProfile/:id': {
+    controller: 'FacebookController',
+    action: 'delete',
+  },
+
   /**
    * Facebook Routes & WebHooks
    */
@@ -89,4 +121,29 @@ module.exports.routes = {
     controller: 'FacebookController',
     action: 'broadcast',
   },
+
+  /*
+  ** Twitter Profile Routes
+  */
+  'POST /twitterProfile': {
+    controller: 'TwitterController',
+    action: 'create',
+  },
+  'GET /twitterProfile/:id': {
+    controller: 'TwitterController',
+    action: 'view',
+  },
+  'GET /twitterProfile': {
+    controller: 'TwitterController',
+    action: 'list',
+  },
+  'PUT /twitterProfile/:id': {
+    controller: 'TwitterController',
+    action: 'update',
+  },
+  'DELETE /twitterProfile/:id': {
+    controller: 'TwitterController',
+    action: 'delete',
+  },
+
 };

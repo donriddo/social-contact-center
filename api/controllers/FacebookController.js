@@ -3,6 +3,156 @@
  */
 
 module.exports = {
+
+  /**
+  * @api {post} /facebookProfile Create facebookProfile
+  * @apiName Create FacebookProfile
+  * @apiGroup FacebookProfile
+  * @apiVersion 0.0.1
+  *
+  * @apiUse FacebookProfileParams
+  *
+  * @apiUse FacebookProfileSuccessResponse
+  *
+  * @apiUse ValidationErrorExample
+  */
+  create(req, res) {
+    let data = req.body;
+    FacebookProfile.create(data).then((facebookProfile) => {
+      return ResponseService.json(
+        200, res, 'Facebook Profile created successfully', facebookProfile
+      );
+    }).catch(err => {
+      return ValidationService.jsonResolveError(err, FacebookProfile, res);
+    });
+  },
+
+  /**
+  * @api {put} /facebookProfile/:id Update facebookProfile
+  * @apiName Update FacebookProfile
+  * @apiGroup FacebookProfile
+  * @apiVersion 0.0.1
+  *
+  * @apiParam {String} id             facebookProfile's id
+  *
+  * @apiUse FacebookProfileParams
+  *
+  * @apiUse FacebookProfileSuccessResponse
+  *
+  * @apiUse ValidationErrorExample
+  * @apiUse NotFoundExample
+  */
+  update(req, res) {
+    let data = req.body;
+    FacebookProfile.update({
+      id: req.param('id'),
+    }, data).then((updatedFacebookProfile) => {
+      if (!updatedFacebookProfile.length) {
+        return ResponseService.json(404, res, 'FacebookProfile not found');
+      }
+
+      return ResponseService.json(
+        200, res, 'Updated facebookProfile successfully', updatedFacebookProfile[0]
+      );
+    }).catch(err => {
+      return ValidationService.jsonResolveError(err, FacebookProfile, res);
+    });
+  },
+
+  /**
+  * @api {get} /facebookProfile/:id Fetch facebookProfile
+  * @apiName Fetch FacebookProfile
+  * @apiGroup FacebookProfile
+  * @apiVersion 0.0.1
+  *
+  * @apiParam {String} id      facebookProfile's id
+  *
+  * @apiUse FacebookProfileSuccessResponse
+  *
+  * @apiUse NotFoundExample
+  */
+  view(req, res) {
+    QueryService.findOne(FacebookProfile, req).then(facebookProfile => {
+      if (!facebookProfile) {
+        return ResponseService.json(404, res, 'FacebookProfile not found');
+      }
+
+      return ResponseService.json(
+        200, res, 'FacebookProfile retrieved successfully', facebookProfile
+      );
+    }).catch(err => {
+      return ValidationService.jsonResolveError(err, FacebookProfile, res);
+    });
+  },
+
+  /**
+  * @api {get} /facebookProfile Fetch all facebookProfiles
+  * @apiName Fetch All FacebookProfile
+  * @apiGroup FacebookProfile
+  * @apiVersion 0.0.1
+  *
+  * @apiUse FacebookProfileSuccessResponse
+  * @apiUse NotFoundExample
+  */
+  list(req, res) {
+    var conditions = { isDeleted: false };
+    QueryService.find(FacebookProfile, req, conditions).then(records => {
+      return ResponseService.json(
+        200,
+        res,
+        'FacebookProfiles retrieved successfully',
+        records.data,
+        records.meta
+      );
+    }).catch(err => {
+      return ValidationService.jsonResolveError(err, FacebookProfile, res);
+    });
+  },
+
+  /**
+  * @api {delete} /facebookProfile/:id Remove facebookProfile
+  * @apiName Remove FacebookProfile
+  * @apiGroup FacebookProfile
+  * @apiVersion 0.0.1
+  *
+  * @apiParam {String} id      employee's id
+  *
+  * @apiUse FacebookProfileParams
+  *
+  * @apiSuccessExample Success-Response
+  * HTTP/1.1 200 OK
+  * {
+  *    "response": {
+  *       "message": "FacebookProfile removed successfully",
+  *       "data": {
+  *          "isDeleted": "true",
+  *          "createdAt": "2015-01-07T09:43:40.100Z",
+  *          "updatedAt": "2015-01-07T09:43:40.100Z",
+  *          "id": "54acffcc902ab22e59bc507a"
+  *       }
+  *    }
+  * }
+  *
+  * @apiUse NotFoundExample
+  */
+  delete(req, res) {
+    let id = req.params.id;
+    FacebookProfile.update(
+      { id: id, isDeleted: false },
+      { isDeleted: true }
+    ).then((deletedFacebookProfile) => {
+      if (!deletedFacebookProfile.length) {
+        return ResponseService.json(404, res, 'FacebookProfile not found');
+      }
+
+      return ResponseService.json(
+        200, res, 'FacebookProfile removed successfully', deletedFacebookProfile[0]
+      );
+    }).catch(err => {
+      return ValidationService.jsonResolveError(err, FacebookProfile, res);
+    });
+  },
+
   verifyToken(req, res) {
     const VERIFY_TOKEN = sails.config.settings.facebook.VERIFY_TOKEN;
     if (req.query['hub.mode'] === 'subscribe' &&
@@ -50,11 +200,11 @@ module.exports = {
   },
 
   message(req, res) {
-    let { userID, message } = req.body;
-    FacebookProfile.findOne({ psid: userID }).then(customer => {
+    let { psid, message } = req.body;
+    FacebookProfile.findOne({ psid: psid }).then(customer => {
       if (!customer)
         return ResponseService.json(404, res, 'Customer not found');
-      FacebookService.sendTextMessage(userID, message);
+      FacebookService.sendTextMessage(psid, message);
       return ResponseService.json(
         200, res, 'Message sent successfully'
       );

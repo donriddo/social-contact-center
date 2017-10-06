@@ -34,7 +34,8 @@
     "sails-mongo": "^0.12.2",
     "sails-pager": "^2.1.0",
     "sails-validation-messages": "^0.0.0",
-    "sparkpost": "^2.1.2"
+    "sparkpost": "^2.1.2",
+    "twitter-node-client": "^0.0.6"
   },
   "scripts": {
     "debug": "node debug app.js",

@@ -1,0 +1,38 @@
+<div id="admin" class="col s12">
+
+  <div class="valign-wrapper" style="width:100%;height:100%;position: absolute;background-color:orange">
+    <div class="valign" style="width:100%;">
+      <div class="container">
+        <div class="row">
+          <div class="col s12 m6 offset-m3">
+            <div class="card">
+              <div class="card-content">
+                <div class="card-title center-align">
+                  <span class="flow-text">Login</span>
+                </div>
+                <form name="loginForm" novalidate>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <input id="email" type="email" class="validate" ng-model="email" required>
+                      <label for="email" data-error="Enter a valid Email" class="active">Email</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <input id="password" type="password" class="validate" ng-model="password" required>
+                      <label for="password" class="active">Password</label>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="card-action">
+                <input type="submit" class="waves-effect orange btn-large" value="Sign In" ng-click="login()" ng-disabled="loginForm.$pristine || loginForm.$invalid">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

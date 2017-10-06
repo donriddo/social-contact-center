@@ -11,7 +11,7 @@ module.exports = function (req, res, next) {
       let credentials = parts[1];
       if (/^Bearer$/i.test(scheme)) {
         let token = credentials;
-        JwtService.verifyToken(token, function (err, decoded) {
+        JwtService.verify(token, function (err, decoded) {
           if (err) {
             return res.json(401, { response: { message: err.message } });
           }

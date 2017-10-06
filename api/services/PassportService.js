@@ -31,7 +31,7 @@ passport.use(new LocalStrategy({
       });
     }
 
-    return done(null, user);
+    return done(null, user.toJSON());
   }).catch(function (err) {
     return done(err, null);
   });

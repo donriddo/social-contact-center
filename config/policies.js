@@ -28,9 +28,13 @@ module.exports.policies = {
 
   '*': 'authenticated',
 
-  'AuthController': true,
+  AuthController: true,
 
-  // 'FacebookController': true,
+  FacebookController: true,
+
+  TwitterController: {
+    create: true,
+  },
 
   /***************************************************************************
   *                                                                          *

@@ -15,7 +15,9 @@
     "User": true,
     "Setup": true,
     "FacebookProfile": true,
+    "TwitterProfile": true,
     "FacebookService": true,
+    "TwitterService": true,
     "sails": true
   },
   "env": {

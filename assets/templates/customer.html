@@ -1,0 +1,42 @@
+<div id="customer" class="col s12">
+
+  <div class="valign-wrapper" style="width:100%;height:100%;position: absolute;background-color:orange">
+    <div class="valign" style="width:100%;">
+      <div class="container">
+        <div class="row">
+          <div class="col s12 m6 offset-m3">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">Follow the instructions below</span>
+                <p>To start receiving updates through your facebook account, use the facebook link below to go to our page.
+                  Click on `Send Message` and then `Get Started`.</p>
+                <br><div class="divider"></div><br>
+                <p>To start receiving updates through your twitter account, submit your twitter handle and use the twitter link below to follow us on twitter.</p>
+                <br><div class="divider"></div><br>
+                <form name="handleForm" novalidate>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <input id="handle" type="text" class="validate" ng-model="handle" required>
+                      <label for="handle" class="active">Twitter Handle</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <input type="submit" class="waves-effect orange btn-large" value="Submit" ng-click="submit()" ng-disabled="handleForm.$pristine || handleForm.$invalid">
+                    </div>
+                  </div>
+                </form>
+                  
+              </div>
+              <div class="card-action">
+                <a href="#">Go to our Facebook Page</a>
+                <a href="#">Sign in with Twitter</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
