@@ -14,8 +14,13 @@ angular.module('app')
             title: response.data.message,
           }
         );
-
-        // $state.go('dashboard');
+        window.localStorage.setItem(
+          'JWT_TOKEN', response.data.data.token
+        );
+        window.localStorage.setItem(
+          'AUTH_USER', JSON.stringify(response.data.data.user)
+        );
+        $state.go('dashboard.facebook');
       }, error => {
 
         toaster.pop({

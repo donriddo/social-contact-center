@@ -55,8 +55,13 @@ module.exports.bootstrap = function (cb) {
     });
 
     User.create(adminUser).then(user => {
+      return [user, TwitterService.getRequestToken()];
+    }).spread((user, token) => {
       return [
-        Setup.update(setup.id, { saasInitialized: true }), user,
+        Setup.update(
+          setup.id,
+          Object.assign(token, { saasInitialized: true })
+        ), user,
       ];
     }).spread((setup, user) => {
       if (setup) console.log('SAAS user initialized successfully: ', user.id);

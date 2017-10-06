@@ -34,6 +34,7 @@ module.exports.policies = {
 
   TwitterController: {
     create: true,
+    handleCallback: true,
   },
 
   /***************************************************************************

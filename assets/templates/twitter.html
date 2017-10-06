@@ -1,0 +1,63 @@
+<div id="customer" class="col s12">
+
+  <div class="valign-wrapper" style="width:100%;height:100%;position: absolute;background-color:teal">
+    <div class="valign" style="width:100%;">
+      <div class="container">
+        <div class="row">
+          <div class="col s12 m6 offset-m3">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">Twitter</span>
+                <p ng-show="!setup.twitterConnected">You need to sign in with your organization's twitter account to start using the service.</p>
+                <br><div class="divider"></div><br>
+                <button ng-click="requestToken()" ng-show="!setup.twitterConnected" class="waves-effect orange btn-large">
+                  <span class="flow-text white-text">sign in with twitter</span>
+                </button>
+                <br><div class="divider"></div><br>
+                <form ng-show="setup.twitterConnected" name="twitterForm" novalidate>
+                  <div class="row">
+                    <div class="">
+                      <input ng-model="broadcast" type="checkbox" id="broadcast"/><label for="broadcast">Tick to broadcast to all customers</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <i class="material-icons prefix">mode_edit</i>
+                      <textarea id="message" class="materialize-textarea validate" ng-model="body.message" required></textarea>
+                      <label for="message">Message</label>
+                    </div>
+                  </div>
+                  <div ng-if="!broadcast" class="row">
+                    <div class="input-field col s12">
+                      <select class="validate" ng-model="body.handle" required>
+                        <option value="" disabled selected>Select Customer</option>
+                        <option ng-repeat="customer in customers" value="{{customer.handle}}">{{customer.handle}}</option>
+                      </select>
+                      <label>Choose Customer to message</label>
+                    </div>
+                  </div>
+                </form>
+
+              </div>
+              <div class="card-action">
+                <input ng-show="setup.twitterConnected" type="submit" class="waves-effect orange btn-large" value="send" ng-click="send()" ng-disabled="twitterForm.$pristine || twitterForm.$invalid">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  $(document).ready(function () {
+    // $(".button-collapse").sideNav({ closeOnClick: true });
+    $('select').material_select();
+    // $(".dropdown-button").dropdown({
+    //   hover: false
+    // });
+  });
+
+</script>

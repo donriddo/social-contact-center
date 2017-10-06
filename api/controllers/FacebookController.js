@@ -95,7 +95,7 @@ module.exports = {
   * @apiUse NotFoundExample
   */
   list(req, res) {
-    var conditions = { isDeleted: false };
+    var conditions = {};
     QueryService.find(FacebookProfile, req, conditions).then(records => {
       return ResponseService.json(
         200,
@@ -201,7 +201,9 @@ module.exports = {
 
   message(req, res) {
     let { psid, message } = req.body;
+    console.log('Body: ', psid, message);
     FacebookProfile.findOne({ psid: psid }).then(customer => {
+      console.log('Customer: ', customer);
       if (!customer)
         return ResponseService.json(404, res, 'Customer not found');
       FacebookService.sendTextMessage(psid, message);

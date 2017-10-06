@@ -99,7 +99,7 @@ module.exports = {
   * @apiUse NotFoundExample
   */
   list(req, res) {
-    var conditions = { isDeleted: false };
+    var conditions = {};
     QueryService.find(TwitterProfile, req, conditions).then(records => {
       return ResponseService.json(
         200,
@@ -158,12 +158,21 @@ module.exports = {
   },
 
   message(req, res) {
-    let { screenName, message } = req.body;
-    TwitterProfile.findOne({ screenName: screenName }).then(customer => {
-      if (!customer)
-        return ResponseService.json(404, res, 'Customer not found');
+    let { handle, message } = req.body;
+    TwitterProfile.findOne({ handle: handle }).then(customer => {
+      if (!customer) {
+        console.log('Customer not found');
+        return false;
+      }
+
+      return Setup.findOne({ twitterConnected: true });
+    }).then(setup => {
+      if (!setup)
+        return ResponseService.json(
+          404, res, 'Customer/Setup not found'
+        );
       TwitterService.sendDirectMessage(
-        screenName, message, ResponseService.json
+        handle, message, setup, ResponseService.json, res
       );
     }).catch(err => {
       return ValidationService.jsonResolveError(
@@ -174,14 +183,47 @@ module.exports = {
 
   broadcast(req, res) {
     let { message } = req.body;
-    TwitterProfile.find().then(customers => {
+    Setup.findOne({ twitterConnected: true }).then(setup => {
+      return [setup, TwitterProfile.find()];
+    }).spread((setup, customers) => {
       if (!customers.length)
         return ResponseService.json(404, res, 'No Customers found');
       customers.forEach(function (customer) {
-        TwitterService.sendDirectMessage(
-          customer.handle, message, ResponseService.json
-        );
+        TwitterService.sendMessage(
+          customer.handle, message, setup);
       }, this);
+
+      return ResponseService.json(
+        200, res, 'Message Broadcast successful'
+      );
+    });
+  },
+
+  getRequestToken(req, res) {
+    let AuthToken = TwitterService.getRequestToken();
+    AuthToken.then(data => {
+      return Promise.all([Setup.update({ saasInitialized: true }, data), data]);
+    }).then(data => {
+      console.log(data[0]);
+      return ResponseService.json(200, res, 'Token success', data[1]);
+    }).catch(err => {
+      return ResponseService.json(400, res, 'Token error', err);
+    });
+  },
+
+  handleCallback(req, res) {
+    console.log('GOT CALLBACK: ', req.query);
+    Setup.update(
+      { authToken: req.query.oauth_token },
+      { authVerifier: req.query.oauth_verifier, twitterConnected: true }
+    ).then(setup => {
+      console.log(setup);
+      if (!setup.length) return res.redirect('/');
+      TwitterService.setAccessToken();
+      return res.redirect('/#/dashboard/twitter');
+    }).catch(err => {
+      console.log('Error handling twitter callback', err);
+      res.redirect('/');
     });
   },
 };

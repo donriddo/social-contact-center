@@ -6,11 +6,16 @@
 */
 
 module.exports = {
+  schema: false,
 
-    attributes: {
-        saasInitialized: {
-            type: 'boolean',
-            defaultsTo: false,
-        },
+  attributes: {
+    saasInitialized: {
+      type: 'boolean',
+      defaultsTo: false,
     },
+    twitterConnected: {
+      type: 'boolean',
+      defaultsTo: false,
+    },
+  },
 };

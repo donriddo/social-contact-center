@@ -35,6 +35,7 @@
     "sails-pager": "^2.1.0",
     "sails-validation-messages": "^0.0.0",
     "sparkpost": "^2.1.2",
+    "twit": "^2.2.9",
     "twitter-node-client": "^0.0.6"
   },
   "scripts": {

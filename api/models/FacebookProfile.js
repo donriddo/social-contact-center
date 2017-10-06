@@ -12,6 +12,10 @@ module.exports = {
       type: 'string',
       unique: true,
     },
+    isDeleted: {
+      type: 'boolean',
+      defaultsTo: false,
+    },
   },
   validationMessages: {
     psid: {

@@ -64,7 +64,7 @@ module.exports = {
             { expiresIn: expiry }
           );
 
-          let decodedToken = jwt.verify(token, secret, function (err, decoded) {
+          jwt.verify(token, secret, function (err, decoded) {
             req.user = user;
             return ResponseService.json(
               200, res, 'Login successful', { user: user, token: token, expiry: decoded.exp }

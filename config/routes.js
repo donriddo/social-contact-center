@@ -54,6 +54,21 @@ module.exports.routes = {
     action: 'login',
   },
 
+  /**
+   * Setup Routes
+   */
+  'GET /setup': function (req, res) {
+    console.log('It is cool if I can do this');
+    Setup.findOne({ saasInitialized: true }).then(setup => {
+      if (!setup)
+        return res.status(404).json({ message: 'No setup found' });
+      return res.status(200).json(setup);
+    }).catch(err => {
+      return res.status(400).json({ err });
+    });
+
+  },
+
   /*
   ** User Routes
   */
@@ -144,6 +159,23 @@ module.exports.routes = {
   'DELETE /twitterProfile/:id': {
     controller: 'TwitterController',
     action: 'delete',
+  },
+
+  'POST /twitter/message': {
+    controller: 'TwitterController',
+    action: 'message',
+  },
+  'POST /twitter/broadcast': {
+    controller: 'TwitterController',
+    action: 'broadcast',
+  },
+  'GET /twitter/token': {
+    controller: 'TwitterController',
+    action: 'getRequestToken',
+  },
+  'GET /twitter/callback': {
+    controller: 'TwitterController',
+    action: 'handleCallback',
   },
 
 };

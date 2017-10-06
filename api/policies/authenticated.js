@@ -4,14 +4,14 @@
 
 module.exports = function (req, res, next) {
   if (req.headers && req.headers.authorization) {
-    let parts = req.headers.authorization.split(' ');
+    var parts = req.headers.authorization.split(' ');
     if (parts.length == 2) {
 
-      let scheme = parts[0];
-      let credentials = parts[1];
+      var scheme = parts[0];
+      var credentials = parts[1];
       if (/^Bearer$/i.test(scheme)) {
         let token = credentials;
-        JwtService.verify(token, function (err, decoded) {
+        JwtService.verifyToken(token, function (err, decoded) {
           if (err) {
             return res.json(401, { response: { message: err.message } });
           }
