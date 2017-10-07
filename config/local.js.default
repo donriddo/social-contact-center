@@ -105,6 +105,20 @@ module.exports = {
 
     settings: {
 
+        facebook: {
+          VERIFY_TOKEN: 'VERIFY_TOKEN',
+          PAGE_ACCESS_TOKEN: 'PAGE_ACCESS_TOKEN',
+          fields: 'first_name,last_name,profile_pic',
+    },
+
+    twitter: {
+      consumerKey: 'consumerKey',
+      consumerSecret: 'consumerSecret',
+      accessToken: 'accessToken',
+      accessTokenSecret: 'accessTokenSecret',
+      callBackUrl: 'https://facebook.localtunnel.me/twitter/callback',
+    },
+
         jwt: {
             domain: process.env.JWT_DOMAIN,
             host: process.env.JWT_HOST,
