@@ -32,10 +32,7 @@ module.exports.policies = {
 
   FacebookController: true,
 
-  TwitterController: {
-    create: true,
-    handleCallback: true,
-  },
+  TwitterController: true,
 
   /***************************************************************************
   *                                                                          *

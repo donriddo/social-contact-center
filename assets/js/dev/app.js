@@ -26,6 +26,14 @@ angular
         abstract: true,
         url: '/',
         templateUrl: 'templates/home.html',
+        controller: [
+          '$scope', function ($scope) {
+            $scope.classes = {
+              adminClass: 'active',
+              customerClass: '',
+            };
+          },
+        ],
       })
       .state('home.admin', {
         url: 'admin',
@@ -43,6 +51,10 @@ angular
         templateUrl: 'templates/dashboard.html',
         controller: [
           '$scope', '$state', function ($scope, $state) {
+            $scope.classes = {
+              facebookClass: 'active',
+              twitterClass: '',
+            };
             if (!window.localStorage.getItem('JWT_TOKEN'))
               $state.go('home.admin');
             $scope.logout = () => {

@@ -6,6 +6,8 @@ angular.module('app')
     );
     $scope.customers = customers.data.data;
     $scope.body = {};
+    $scope.classes.facebookClass = 'active';
+    $scope.classes.twitterClass = '';
 
     $scope.send = () => {
 

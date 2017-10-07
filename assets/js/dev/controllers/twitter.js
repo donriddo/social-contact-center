@@ -5,6 +5,9 @@ angular.module('app')
     $scope.customers = customers.data.data;
     $scope.body = {};
 
+    $scope.classes.facebookClass = '';
+    $scope.classes.twitterClass = 'active';
+
     $scope.requestToken = () => {
       API.all('twitter/token').customGET('').then(response => {
         console.log('Got response: ', response);

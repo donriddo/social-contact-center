@@ -1,6 +1,8 @@
 angular.module('app')
   .controller('customerCtrl', ['$scope', '$state', 'API', 'toaster', function ($scope, $state, API, toaster) {
     console.log('Started: Customer Controller');
+    $scope.classes.adminClass = '';
+    $scope.classes.customerClass = 'active';
     $scope.submit = () => {
       let body = {
         handle: $scope.handle,

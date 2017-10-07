@@ -1,6 +1,8 @@
 angular.module('app')
   .controller('adminCtrl', ['$scope', '$state', 'API', 'toaster', function ($scope, $state, API, toaster) {
     console.log('Started: Admin Controller');
+    $scope.classes.adminClass = 'active';
+    $scope.classes.customerClass = '';
     $scope.login = () => {
       let body = {
         email: $scope.email,

@@ -3,13 +3,13 @@
     <a href="#" class="brand-logo">Facebook - Twitter Messenger API Integration</a>
     <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
     <ul id="nav-mobile" class="right hide-on-med-and-down">
-      <li><a ui-sref="dashboard.facebook">Facebook</a></li>
-      <li><a ui-sref="dashboard.twitter">Twitter</a></li>
+      <li class="{{classes.facebookClass}}"><a ui-sref="dashboard.facebook">Facebook</a></li>
+      <li class="{{classes.twitterClass}}"><a ui-sref="dashboard.twitter">Twitter</a></li>
       <li><a ng-click="logout()">Logout</a></li>
     </ul>
     <ul class="side-nav" id="mobile-demo">
-      <li><a ui-sref="dashboard.facebook">Facebook/a></li>
-      <li><a ui-sref="dashboard.twitter">Twitter</a></li>
+      <li class="{{classes.facebookClass}}"><a ui-sref="dashboard.facebook">Facebook/a></li>
+      <li class="{{classes.twitterClass}}"><a ui-sref="dashboard.twitter">Twitter</a></li>
       <li><a ng-click="logout()">Logout</a></li>
     </ul>
   </div>

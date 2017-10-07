@@ -3,12 +3,12 @@
     <a href="#" class="brand-logo">Facebook - Twitter Messenger API Integration</a>
     <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
     <ul id="nav-mobile" class="right hide-on-med-and-down">
-      <li><a ui-sref="home.admin">Admin View</a></li>
-      <li><a ui-sref="home.customer">Customer View</a></li>
+      <li class="{{classes.adminClass}}"><a ui-sref="home.admin">Admin View</a></li>
+      <li class="{{classes.customerClass}}"><a ui-sref="home.customer">Customer View</a></li>
     </ul>
     <ul class="side-nav" id="mobile-demo">
-      <li><a ui-sref="home.admin">Admin View</a></li>
-      <li><a ui-sref="home.customer">Customer View</a></li>
+      <li class="{{classes.adminClass}}"><a ui-sref="home.admin">Admin View</a></li>
+      <li class="{{classes.customerClass}}"><a ui-sref="home.customer">Customer View</a></li>
     </ul>
   </div>
 </nav>
