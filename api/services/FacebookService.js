@@ -98,6 +98,7 @@ module.exports = {
 
   // Incoming events handling
   receivedMessage(event) {
+    const self = this;
     let senderID = event.sender.id;
     let recipientID = event.recipient.id;
     let timeOfMessage = event.timestamp;
@@ -126,6 +127,29 @@ module.exports = {
     } else if (messageAttachments) {
       this.sendTextMessage(senderID, 'Message with attachment received');
     }
+
+    FacebookProfile.findOne({ psid: senderID }).then(customer => {
+      if (!customer) {
+        console.log('Customer has not been registered before.');
+        console.log('Attempting to register %d now...', senderID);
+        return self.registerProfile(senderID);
+      } else {
+        console.log('Facebook Customer already registered.');
+      }
+    }).then(facebookProfile => {
+      if (!facebookProfile) {
+        console.log(
+          'Facebook Profile not registered, probably just a message echo'
+        );
+      } else {
+        console.log(
+          'Facebook Customer registered successfully: %s', facebookProfile
+        );
+      }
+    }).catch(err => {
+      console.log('Error registering Facebook Customer: ', err);
+    });
+
   },
 
   receivedPostback(event) {
@@ -144,6 +168,21 @@ module.exports = {
     // When a postback is called, we'll send a message back to the sender to
     // let them know it was successful
     if (payload === '<GET_STARTED_PAYLOAD>') {
+      self.registerProfile(senderID).then(facebookProfile => {
+        self.sendTextMessage(
+          senderID, `Welcome ${facebookProfile.first_name}`
+        );
+      }).catch(err => {
+        console.log('Error registering Facebook Customer: ', err);
+      });
+    } else {
+      this.sendTextMessage(senderID, 'Postback called');
+    }
+
+  },
+
+  registerProfile(senderID) {
+    return new Promise((resolve, reject) => {
       request({
         uri: `https://graph.facebook.com/v2.6/${senderID}`,
         qs: {
@@ -158,21 +197,17 @@ module.exports = {
           delete data.id;
           console.log('Successfully retrieved facebookProfile profile: ', data);
           let facebookProfileData = Object.assign(data, { psid: senderID });
-          FacebookProfile.create(facebookProfileData).then(function (facebookProfile) {
+          FacebookProfile.findOrCreate(facebookProfileData).then(function (facebookProfile) {
             console.log('FacebookProfile created successfully: ', facebookProfile);
-            self.sendTextMessage(senderID, `Welcome ${facebookProfile.first_name}`);
+            resolve(facebookProfile);
           }).catch(err => {
-            console.error(err);
+            reject(err);
           });
         } else {
-          console.error('Unable to set payload.');
-          // console.error(response);
-          // console.error(error);
+          console.error('Unable to get user profile.');
         }
       });
-    } else {
-      this.sendTextMessage(senderID, 'Postback called');
-    }
+    });
 
   },
 
